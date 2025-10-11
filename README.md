@@ -84,8 +84,13 @@ The validator is deployed as a simple full-stack application  that integrates th
 
 sql-query-validator/
 ├── app.py              # Flask API (Backend entry point)
+
 ├── requirements.txt    # Project dependencies (Flask, flask-cors)
+
 ├── index.html          # Frontend UI (HTML/JS)
+
 └── src/
+
 ├── lexer.py        # Lexical Analyzer (Tokenization)
+
 └── parser.py       # Syntactic Analyzer (CFG/Recursive Descent)

@@ -82,13 +82,15 @@ The validator is deployed as a simple full-stack application  that integrates th
 
 ## Repository Structure
 
-SQL-QUERY-VALIDATOR/
-├── .gitignore          # Tells Git to ignore venv, __pycache__, etc.
-├── README.md           # Project documentation and setup guide (The file you are reading)
-├── app.py              # Flask API entry point (Connects UI to core logic)
-├── index.html          # Frontend UI (HTML, CSS, and JavaScript for user interaction)
-├── requirements.txt    # List of all Python dependencies (Flask, flask-cors)
-├── venv/               # (IGNORED by Git) Virtual environment folder
-└── src/                # Core Validation Engine
-    ├── lexer.py        # Lexical Analyzer (Tokenization via Regular Expressions)
-    └── parser.py       # Syntactic Analyzer (Context-Free Grammar / Recursive Descent Parser)
+The project structure separates the core validation logic (`src/`) from the web interface and configuration files.
+
+* **Project Root Files:**
+    * `README.md`: Project documentation and setup guide.
+    * `app.py`: The **Flask API** entry point. Handles web requests and runs the validator.
+    * `index.html`: The **Frontend UI**. Contains the HTML, CSS, and JavaScript for user interaction.
+    * `requirements.txt`: Lists all Python dependencies (Flask, flask-cors).
+    * `.gitignore`: Configuration file to ignore the virtual environment (`venv/`).
+
+* **`src/` (Core Validation Engine):**
+    * `lexer.py`: Implements the **Lexical Analyzer** (Tokenization via Regular Expressions).
+    * `parser.py`: Implements the **Syntactic Analyzer** (Context-Free Grammar / Recursive Descent Parser).

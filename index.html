@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Query Validator | Academic Project</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f9; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #333; }
+        textarea { width: 100%; height: 150px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-family: monospace; font-size: 14px; margin-bottom: 10px; box-sizing: border-box; }
+        button { background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; margin-bottom: 20px; }
+        button:hover { background-color: #0056b3; }
+        .result-box { border: 1px solid #ccc; padding: 15px; border-radius: 4px; min-height: 50px; }
+        .success { background-color: #d4edda; color: #155724; border-color: #c3e6cb; }
+        .failure { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SQL Query Validator (CFG)</h1>
+        <p>Enter your SQL query below to validate its structure against the implemented Context-Free Grammar.</p>
+        
+        <textarea id="queryInput" placeholder="e.g., SELECT u.name, COUNT(*) AS total FROM users u WHERE u.age > 25 GROUP BY u.name;"></textarea>
+        
+        <button onclick="validateQuery()">Validate Query</button>
+        
+        <h2>Validation Result</h2>
+        <div id="resultBox" class="result-box">
+            Awaiting query...
+        </div>
+    </div>
+
+    <script>
+        // Function to send the SQL query to the Flask API
+        async function validateQuery() {
+            const query = document.getElementById('queryInput').value;
+            const resultBox = document.getElementById('resultBox');
+            
+            // Clear previous results and set status
+            resultBox.className = 'result-box';
+            resultBox.innerHTML = 'Validating...';
+
+            if (!query.trim()) {
+                resultBox.innerHTML = 'Please enter an SQL query.';
+                return;
+            }
+
+            try {
+                // Fetch sends the query to your running Flask server
+                const response = await fetch('http://127.0.0.1:5000/api/validate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ query: query }) // Sends the query in the format Flask expects
+                });
+
+                const data = await response.json();
+
+                if (data.valid) {
+                    resultBox.classList.add('success');
+                    resultBox.innerHTML = `<strong>✅ VALID!</strong><br>${data.message}`;
+                } else {
+                    resultBox.classList.add('failure');
+                    resultBox.innerHTML = `<strong>❌ INVALID!</strong> (${data.error_type})<br>${data.error_message}`;
+                }
+
+            } catch (error) {
+                resultBox.classList.add('failure');
+                resultBox.innerHTML = `<strong>❌ ERROR:</strong> Could not connect to the API server.<br>Ensure the Flask server is running at http://127.0.0.1:5000.`;
+            }
+        }
+    </script>
+</body>
+</html>

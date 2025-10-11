@@ -1,0 +1,9 @@
+
+# Virtual Environment Folder
+venv/
+
+# Compiled Python bytecode files
+*.pyc
+
+# IDE Configuration Files
+.vscode/

@@ -1,6 +1,5 @@
 import re
 from typing import List, Tuple
-
 # TOKEN_PATTERNS: Order is critical (specific keywords before generic identifiers)
 TOKEN_PATTERNS = [
     # 1. Keywords (Case-insensitive)
@@ -8,31 +7,31 @@ TOKEN_PATTERNS = [
     
     # 2. Built-in Functions
     (r'\b(COUNT|SUM|AVG|MIN|MAX)\b', 'FUNCTION'),
+
+    # 3. Wildcard (Crucial: must be before identifiers if identifiers are generic)
+    (r'\*', 'WILDCARD'),
     
-    # 3. Operators (Multi-character operators first)
+    # 4. Operators
     (r'>=|<=|!=|==|=|>|<|\+|-|\*|/', 'OPERATOR'),
     
-    # 4. Literals: Strings (single quotes)
+    # 5. Literals: Strings
     (r"'[^']*'", 'STRING'),
     
-    # 5. Literals: Numbers (integers and floats)
+    # 6. Literals: Numbers
     (r'\b\d+(\.\d+)?\b', 'NUMBER'),
     
-    # 6. Syntax Elements
+    # 7. Syntax Elements
     (r'[\(\)]', 'PARENTHESIS'),
     (r',', 'COMMA'),
     (r';', 'SEMICOLON'),
 
-    # 7. Dot for table.column qualification
+    # 8. Dot for table.column qualification
     (r'\.', 'DOT'), 
-
-    # 8. Wildcard
-    (r'\*', 'WILDCARD'),
     
-    # 9. Identifiers (Table/Column names)
+    # 9. Identifiers
     (r'[a-zA-Z_][a-zA-Z0-9_]*', 'IDENTIFIER'),
     
-    # 10. Whitespace (token_type=None to skip)
+    # 10. Whitespace
     (r'\s+', None),
 ]
 
@@ -51,7 +50,7 @@ def tokenize(query: str) -> List[Tuple[str, str]]:
             if match:
                 value = match.group(0)
                 
-                if token_type: # Skip whitespace
+                if token_type:
                     tokens.append((value.upper(), token_type))
                     
                 position += len(value)
